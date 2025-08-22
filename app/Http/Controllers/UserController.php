@@ -3,62 +3,106 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function showRegisterForm()
     {
-        //
+        if (auth()->check() && auth()->user()->role !== 'admin') {
+            abort(403, 'No tienes permiso para acceder.');
+        }
+
+        return view('auth.register');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function register(Request $request)
     {
-        //
+        $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'role'     => 'in:admin,referee,fan',
+        ]); 
+
+        // Si NO es admin, forzamos que no pueda crearse como admin
+        $role = $request->role;
+
+        if (!auth()->check() || auth()->user()->role !== 'admin') {
+            if ($role === 'admin') {
+                $role = 'fan'; // seguridad extra
+            }
+        }
+
+        $user = User::create([
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => Hash::make($request->password),
+            'role'     => $role ?? 'fan',
+        ]);
+
+        Auth::login($user);
+        return redirect()->route('home')->with('success', 'Usuario registrado correctamente.');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+
+    
+    public function showLoginForm()
     {
-        //
+        return view('auth.login');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function login(Request $request)
     {
-        //
+        $request->validate([
+            'email'    => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if (Auth::attempt($request->only('email', 'password'))) {
+            $request->session()->regenerate();
+            return redirect()->intended(route('home'));
+        }
+
+        return back()->withErrors([
+            'email' => 'Las credenciales no son correctas.',
+        ])->withInput();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function logout(Request $request)
     {
-        //
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function edit()
     {
-        //
+        return view('auth.edit', ['user' => Auth::user()]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+
+    public function update(Request $request)
     {
-        //
+        $user = Auth::user();
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'role' => 'in:admin,referee,fan',
+        ]);
+
+        $user->name = $request->name;
+
+        if ($user->role === 'admin' && $request->filled('role')) {
+            $user->role = $request->role;
+        }
+
+        $user->save();
+
+        return redirect()->route('home')->with('success', 'Perfil actualizado correctamente.');
     }
 }
