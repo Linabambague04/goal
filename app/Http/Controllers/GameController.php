@@ -76,47 +76,15 @@ class GameController extends Controller
 
     public function finish(Game $game)
     {
-        // Equipos participantes
-        $local = $game->localTeam;
-        $visiting = $game->visitingTeam;
-
-        // Actualizar partidos jugados
-        $local->increment('games_played');
-        $visiting->increment('games_played');
-
-        // Actualizar goles anotados
-        $local->increment('goals_scored', $game->local_goals);
-        $visiting->increment('goals_scored', $game->visiting_goals);
-
-        // Determinar resultado
-        if ($game->local_goals > $game->visiting_goals) {
-            // Local ganó
-            $local->increment('matches_won');
-            $local->increment('points', 3);
-
-            $visiting->increment('lost_matches');
-
-        } elseif ($game->local_goals < $game->visiting_goals) {
-            // Visitante ganó
-            $visiting->increment('matches_won');
-            $visiting->increment('points', 3);
-
-            $local->increment('lost_matches');
-
-        } else {
-            // Empate
-            $local->increment('tied_matches');
-            $visiting->increment('tied_matches');
-
-            $local->increment('points', 1);
-            $visiting->increment('points', 1);
-        }
-
-        // Marcar partido como finalizado
-        $game->state = 'finished';
-        $game->save();
+        $game->update(['state' => 'finished']);
 
         return redirect()->route('games.index')->with('success', 'Partido finalizado y estadísticas actualizadas.');
     }
+
+    public function show(Game $game)
+    {
+        return view('games.show', compact('game'));
+    }
+
 
 }

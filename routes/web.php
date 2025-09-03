@@ -21,8 +21,6 @@ Route::post('/login', [UserController::class, 'login'])->name('login');
 
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
-Route::patch('/games/{game}/finish', [GameController::class, 'finish'])->name('games.finish');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile/edit', [UserController::class, 'edit'])->name('user.edit');
     Route::put('/profile/update', [UserController::class, 'update'])->name('user.update');
@@ -42,3 +40,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('games', GameController::class);
     Route::resource('cards', CardController::class);
 });
+Route::patch('/games/{game}/finish', [GameController::class, 'finish'])->name('games.finish');
+

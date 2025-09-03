@@ -11,132 +11,133 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
-    body {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        font-family: 'Segoe UI', sans-serif;
-        background: #000;
-        color: #e0e0e0;
-    }
-    main {
-        flex: 1;
-    }
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+    background: #000;
+    color: #e0e0e0;
+}
+main {
+    flex: 1;
+}
 
-    /* Navbar */
-    .navbar {
-        background: #111;
-        border-bottom: 1px solid #222;
-    }
-    .navbar-brand {
-        font-weight: bold;
-        font-size: 1.4rem;
-        color: #e0e0e0 !important;
-        transition: color 0.3s ease;
-    }
-    .navbar-brand:hover {
-        color: #fff !important;
-    }
+/* Navbar */
+.navbar {
+    background: #111;
+    border-bottom: 1px solid #222;
+}
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.4rem;
+    color: #e0e0e0 !important;
+    transition: color 0.3s ease;
+}
+.navbar-brand:hover {
+    color: #ff4d4d !important; /* hover rojo */
+}
 
-    .nav-link {
-        position: relative;
-        color: #aaa !important;
-        transition: color 0.3s ease;
-        text-align: center;
-    }
-    .nav-link::after {
-        content: '';
-        position: absolute;
-        left: 50%;
-        bottom: 0; /* pegado al texto */
-        transform: translateX(-50%);
-        width: 0;
-        height: 2px;
-        background: #fff;
-        transition: width 0.3s ease;
-    }
-    .nav-link:hover {
-        color: #fff !important;
-    }
-    .nav-link:hover::after {
-        width: 60%;
-    }
+.nav-link {
+    position: relative;
+    color: #aaa !important;
+    transition: color 0.3s ease;
+    text-align: center;
+}
+.nav-link::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: #ff4d4d; /* subrayado hover rojo */
+    transition: width 0.3s ease;
+}
+.nav-link:hover {
+    color: #ff4d4d !important; /* hover rojo */
+}
+.nav-link:hover::after {
+    width: 60%;
+}
 
-    /* Quitar flecha del dropdown */
-    .navbar .dropdown-toggle::after {
-        display: none;
-    }
+/* Quitar flecha del dropdown */
+.navbar .dropdown-toggle::after {
+    display: none;
+}
 
-    /* Cards */
-    .card-custom {
-        background: #111;
-        border: 1px solid #222;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 6px 18px rgba(0,0,0,0.8);
-        transition: transform 0.2s ease, box-shadow 0.3s ease, border 0.3s ease;
-    }
-    .card-custom:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 28px rgba(0,0,0,1);
-        border-color: #fff;
-    }
+/* Cards */
+.card-custom {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.8);
+    transition: transform 0.2s ease, box-shadow 0.3s ease, border 0.3s ease;
+}
+.card-custom:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0,0,0,1);
+    border-color: #ff4d4d; /* borde rojo al hover */
+}
 
-    /* Botones */
-    .btn-primary {
-        background: #222;
-        border: 1px solid #444;
-        font-weight: bold;
-        color: #e0e0e0;
-        transition: all 0.3s ease;
-    }
-    .btn-primary:hover {
-        background: #fff;
-        color: #000;
-        border-color: #fff;
-        transform: scale(1.05);
-    }
+/* Botones */
+.btn-primary {
+    background: #222;
+    border: 1px solid #444;
+    font-weight: bold;
+    color: #e0e0e0;
+    transition: all 0.3s ease;
+}
+.btn-primary:hover {
+    background: #ff4d4d; /* hover rojo */
+    color: #fff;
+    border-color: #ff4d4d;
+    transform: scale(1.05);
+}
 
-    /* Tablas */
-    .table-dark-custom {
-        background: #111;
-        color: #e0e0e0;
-    }
-    .table-dark-custom th {
-        background: #222;
-        color: #fff;
-    }
-    .table-dark-custom tbody tr:hover {
-        background: #1c1c1c;
-    }
+/* Tablas */
+.table-dark-custom {
+    background: #111;
+    color: #e0e0e0;
+}
+.table-dark-custom th {
+    background: #222;
+    color: #e0e0e0;
+}
+.table-dark-custom tbody tr:hover {
+    background: #330000; /* hover rojo oscuro */
+}
 
-    /* Badges */
-    .badge-custom {
-        background: #333;
-        color: #e0e0e0;
-        border-radius: 8px;
-        padding: 4px 8px;
-        font-size: 0.75rem;
-        font-weight: bold;
-        transition: background 0.3s ease, color 0.3s ease;
-    }
-    .badge-custom:hover {
-        background: #fff;
-        color: #000;
-    }
+/* Badges */
+.badge-custom {
+    background: #333;
+    color: #e0e0e0;
+    border-radius: 8px;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+.badge-custom:hover {
+    background: #ff4d4d; /* hover rojo */
+    color: #fff;
+}
 
-    /* Footer */
-    footer {
-        background: #111;
-        color: #888;
-        font-size: 0.9rem;
-        border-top: 1px solid #222;
-        transition: color 0.3s ease;
-    }
-    footer:hover {
-        color: #fff;
-    }
-    </style>
+/* Footer */
+footer {
+    background: #111;
+    color: #888;
+    font-size: 0.9rem;
+    border-top: 1px solid #222;
+    transition: color 0.3s ease;
+}
+footer:hover {
+    color: #ff4d4d; /* hover rojo */
+}
+</style>
+
 </head>
 <body>
 
