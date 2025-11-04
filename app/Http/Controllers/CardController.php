@@ -4,62 +4,62 @@ namespace App\Http\Controllers;
 
 use App\Models\Card;
 use Illuminate\Http\Request;
+use App\Models\Game;
+use App\Models\Player;
 
 class CardController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $cards = Card::with(['game', 'player'])->latest()->get();
+        return view('cards.index', compact('cards'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $games = Game::all();
+        $players = Player::all();
+        return view('cards.create', compact('games', 'players'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'game_id' => 'required|exists:games,id',
+            'player_id' => 'required|exists:players,id',
+            'type' => 'required|in:yellow,red',
+            'minute' => 'required|integer|min:0'
+        ]);
+
+        Card::create($request->all());
+
+        return redirect()->route('cards.index')->with('success', 'Tarjeta registrada correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Card $card)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Card $card)
     {
-        //
+        $games = Game::all();
+        $players = Player::all();
+        return view('cards.edit', compact('card', 'games', 'players'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Card $card)
     {
-        //
+        $request->validate([
+            'game_id' => 'required|exists:games,id',
+            'player_id' => 'required|exists:players,id',
+            'type' => 'required|in:yellow,red',
+            'minute' => 'required|integer|min:0'
+        ]);
+
+        $card->update($request->all());
+
+        return redirect()->route('cards.index')->with('success', 'Tarjeta actualizada correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Card $card)
     {
-        //
+        $card->delete();
+        return redirect()->route('cards.index')->with('success', 'Tarjeta eliminada correctamente.');
     }
 }

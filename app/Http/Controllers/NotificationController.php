@@ -4,62 +4,45 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $notifications = Notification::where('user_id', auth()->id())
+            ->latest()
+            ->get();
+
+        return view('notifications.index', compact('notifications'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function markAsRead($id)
     {
-        //
+        $notification = Notification::where('user_id', auth()->id())
+            ->where('id', $id)
+            ->firstOrFail();
+
+        $notification->update(['read' => true]);
+
+        return back()->with('success', 'Notificación marcada como leída.');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'title' => 'required|string',
+            'message' => 'required|string',
+            'type' => 'required|in:reminder,result,alert',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Notification $notification)
-    {
-        //
-    }
+        Notification::create([
+            'user_id' => auth()->id(),
+            'title' => $request->title,
+            'message' => $request->message,
+            'type' => $request->type,
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Notification $notification)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Notification $notification)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Notification $notification)
-    {
-        //
+        return back()->with('success', 'Notificación creada.');
     }
 }
